@@ -12,6 +12,9 @@ export TERM="xterm-256color"
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/gray/.config/oh-my-zsh"
 
+# Use vim mode
+set -o vi
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -112,27 +115,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export HAXE_STD_PATH="/usr/local/lib/haxe/std"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="/Applications/Postgres.app/Contents/Versions/14/bin:$PATH"
-export PATH="/Users/gray/.config/emacs/bin:$PATH"
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/gray/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/gray/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/gray/opt/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/gray/opt/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-export PATH="/usr/local/opt/swift/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -4,3 +4,6 @@ iterm2
 # Tmux plugins are git repos, let's filter them out.
 tmux/plugins/*
 !tmux/plugins/tpm
+
+# No zsh history please
+zsh/.zsh_history
