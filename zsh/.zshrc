@@ -10,7 +10,7 @@ export TERM="xterm-256color"
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="~/.config/oh-my-zsh"
+export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
 
 # Use vim mode
 set -o vi
