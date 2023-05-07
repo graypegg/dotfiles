@@ -45,129 +45,133 @@ call plug#begin()
 call plug#end()
 ]])
 
--- Set colour scheme
-vim.cmd[[colorscheme tokyonight-moon]]
+-- If everything is installed, set up config.
+-- Gives you a chance to do a :PlugInstall x2 to get everything working. (Two times because of dependancies)
+if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
+	-- Set colour scheme
+	vim.cmd[[colorscheme tokyonight-moon]]
 
--- Set up nvim-tree
-require("nvim-tree").setup({
-	sort_by = "case_sensitive",
-	view = {
-		width = 30,
-	},
-	renderer = {
-		group_empty = true,
-	},
-	filters = {
-		dotfiles = true,
-	},
-})
+	-- Set up nvim-tree
+	require("nvim-tree").setup({
+		sort_by = "case_sensitive",
+		view = {
+			width = 30,
+		},
+		renderer = {
+			group_empty = true,
+		},
+		filters = {
+			dotfiles = true,
+		},
+	})
 
--- Set up tree sitter
-require'nvim-treesitter.configs'.setup {
-	ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua' },
-}
-
--- Set up LSPs
-require'lspconfig'.tsserver.setup {}
-require'lspconfig'.solargraph.setup {}
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
-
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-    -- Buffer local mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<leader>f', function()
-      vim.lsp.buf.format { async = true }
-    end, opts)
-  end,
-})
-
--- Set up Airline
-vim.g.airline_theme = 'deus'
-
--- Set up Which Key
-local wk = require("which-key")
-wk.register({
-	P = { name = "Misc" },
-	e = "Explore",
-	r = {
-		name = "Refactor",
-		i = "Inline Variable",
-		b = "Extract Block",
-	},
-	b = {
-		name = "Buffers",
-		n = "Next",
-		v = "Prev",
-		c = "Close",
-		b = "Jump"
-	},
-	f = "Format",
-	rn = "Rename",
-	a = "Code Action",
-	s = {
-		name = "Split Buffers",
-		v = "Vertical",
-		h = "Horizontal"
+	-- Set up tree sitter
+	require'nvim-treesitter.configs'.setup {
+		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua' },
 	}
-}, { prefix = '<Leader>'})
-wk.register({
-	gd = "Go to Definition",
-	gD = "Go to Declaration",
-	gi = "Go to Implemention",
-	gr = "Go to Reference",
-})
 
-wk.register({
-	r = {
-		name = "Refactor",
-		e = "Extract Function",
-		f = "Extract Function to File",
-		v = "Extract Variable",
-		i = "Inline Variable"
-	}
-}, { mode = 'v', prefix = '<Leader>'})
-vim.opt.timeoutlen=500
+	-- Set up LSPs
+	require'lspconfig'.tsserver.setup {}
+	require'lspconfig'.solargraph.setup {}
+	vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+	vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+	vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
--- Set up refactoring tools
-require('refactoring').setup({})
+	-- Use LspAttach autocommand to only map the following keys
+	-- after the language server attaches to the current buffer
+	vim.api.nvim_create_autocmd('LspAttach', {
+	  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+	  callback = function(ev)
+	    -- Enable completion triggered by <c-x><c-o>
+	    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
--- Remaps for the refactoring operations currently offered by the plugin
-vim.api.nvim_set_keymap("v", "<leader>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
-vim.api.nvim_set_keymap("v", "<leader>rf", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]], {noremap = true, silent = true, expr = false})
-vim.api.nvim_set_keymap("v", "<leader>rv", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]], {noremap = true, silent = true, expr = false})
-vim.api.nvim_set_keymap("v", "<leader>ri", [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+	    -- Buffer local mappings.
+	    -- See `:help vim.lsp.*` for documentation on any of the below functions
+	    local opts = { buffer = ev.buf }
+	    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+	    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+	    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+	    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+	    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+	    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+	    vim.keymap.set({ 'n', 'v' }, '<leader>a', vim.lsp.buf.code_action, opts)
+	    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+	    vim.keymap.set('n', '<leader>f', function()
+	      vim.lsp.buf.format { async = true }
+	    end, opts)
+	  end,
+	})
 
--- Extract block doesn't need visual mode
-vim.api.nvim_set_keymap("n", "<leader>rb", [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]], {noremap = true, silent = true, expr = false})
-vim.api.nvim_set_keymap("n", "<leader>rbf", [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]], {noremap = true, silent = true, expr = false})
+	-- Set up Airline
+	vim.g.airline_theme = 'deus'
 
--- Inline variable can also pick up the identifier currently under the cursor without visual mode
-vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+	-- Set up Which Key
+	local wk = require("which-key")
+	wk.register({
+		P = { name = "Misc" },
+		e = "Explore",
+		r = {
+			name = "Refactor",
+			i = "Inline Variable",
+			b = "Extract Block",
+		},
+		b = {
+			name = "Buffers",
+			n = "Next",
+			v = "Prev",
+			c = "Close",
+			b = "Jump"
+		},
+		f = "Format",
+		rn = "Rename",
+		a = "Code Action",
+		s = {
+			name = "Split Buffers",
+			v = "Vertical",
+			h = "Horizontal"
+		}
+	}, { prefix = '<Leader>'})
+	wk.register({
+		gd = "Go to Definition",
+		gD = "Go to Declaration",
+		gi = "Go to Implemention",
+		gr = "Go to Reference",
+	})
 
--- Disable netrw since we're using nvim-tree.
-vim.g.loaded_netr = 1
-vim.g.loaded_netrwPlugin = 1
+	wk.register({
+		r = {
+			name = "Refactor",
+			e = "Extract Function",
+			f = "Extract Function to File",
+			v = "Extract Variable",
+			i = "Inline Variable"
+		}
+	}, { mode = 'v', prefix = '<Leader>'})
+	vim.opt.timeoutlen=500
 
--- Colourful
-vim.opt.termguicolors = true
+	-- Set up refactoring tools
+	require('refactoring').setup({})
 
--- Other config to make things less horrible
-vim.opt.rnu = true
+	-- Remaps for the refactoring operations currently offered by the plugin
+	vim.api.nvim_set_keymap("v", "<leader>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
+	vim.api.nvim_set_keymap("v", "<leader>rf", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]], {noremap = true, silent = true, expr = false})
+	vim.api.nvim_set_keymap("v", "<leader>rv", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]], {noremap = true, silent = true, expr = false})
+	vim.api.nvim_set_keymap("v", "<leader>ri", [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+
+	-- Extract block doesn't need visual mode
+	vim.api.nvim_set_keymap("n", "<leader>rb", [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]], {noremap = true, silent = true, expr = false})
+	vim.api.nvim_set_keymap("n", "<leader>rbf", [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]], {noremap = true, silent = true, expr = false})
+
+	-- Inline variable can also pick up the identifier currently under the cursor without visual mode
+	vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})
+
+	-- Disable netrw since we're using nvim-tree.
+	vim.g.loaded_netr = 1
+	vim.g.loaded_netrwPlugin = 1
+
+	-- Colourful
+	vim.opt.termguicolors = true
+
+	-- Other config to make things less horrible
+	vim.opt.rnu = true
+end
