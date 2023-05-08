@@ -20,6 +20,17 @@ vim.keymap.set('n', '<C-k>', '<C-w>k')
 
 -- Vim Plug
 vim.cmd([[
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 call plug#begin()
 	Plug 'neovim/nvim-lspconfig'
 
@@ -35,13 +46,15 @@ call plug#begin()
 
 	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-	Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
-
 	Plug 'nvim-lua/plenary.nvim'
 
 	Plug 'ThePrimeagen/refactoring.nvim'
 
 	Plug 'christoomey/vim-tmux-navigator'
+
+	Plug 'glepnir/zephyr-nvim'
+
+	Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
 call plug#end()
 ]])
 
@@ -49,7 +62,11 @@ call plug#end()
 -- Gives you a chance to do a :PlugInstall x2 to get everything working. (Two times because of dependancies)
 if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	-- Set colour scheme
-	vim.cmd[[colorscheme tokyonight-moon]]
+	vim.cmd[[colorscheme zephyr]]
+	vim.g.airline_theme = 'jet'
+
+	-- Colourful
+	vim.opt.termguicolors = true
 
 	-- Set up nvim-tree
 	require("nvim-tree").setup({
@@ -102,9 +119,6 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	  end,
 	})
 
-	-- Set up Airline
-	vim.g.airline_theme = 'deus'
-
 	-- Set up Which Key
 	local wk = require("which-key")
 	wk.register({
@@ -120,7 +134,8 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 			n = "Next",
 			v = "Prev",
 			c = "Close",
-			b = "Jump"
+			b = "Jump",
+			["<leader>"] = "Search"
 		},
 		f = "Format",
 		rn = "Rename",
@@ -129,6 +144,13 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 			name = "Split Buffers",
 			v = "Vertical",
 			h = "Horizontal"
+		},
+		["<leader>"] = {
+			name = "Search",
+			f = "Find Files",
+			g = "Live Grep",
+			b = "Buffers",
+			h = "Help"
 		}
 	}, { prefix = '<Leader>'})
 	wk.register({
@@ -152,6 +174,14 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	-- Set up refactoring tools
 	require('refactoring').setup({})
 
+	-- Set up telescope
+	local builtin = require('telescope.builtin')
+	vim.keymap.set('n', '<leader><leader>f', builtin.find_files, {})
+	vim.keymap.set('n', '<leader><leader>g', builtin.live_grep, {})
+	vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
+	vim.keymap.set('n', 'b<leader>', builtin.buffers, {})
+	vim.keymap.set('n', '<leader><leader>h', builtin.help_tags, {})
+
 	-- Remaps for the refactoring operations currently offered by the plugin
 	vim.api.nvim_set_keymap("v", "<leader>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
 	vim.api.nvim_set_keymap("v", "<leader>rf", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]], {noremap = true, silent = true, expr = false})
@@ -168,9 +198,6 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	-- Disable netrw since we're using nvim-tree.
 	vim.g.loaded_netr = 1
 	vim.g.loaded_netrwPlugin = 1
-
-	-- Colourful
-	vim.opt.termguicolors = true
 
 	-- Other config to make things less horrible
 	vim.opt.rnu = true
