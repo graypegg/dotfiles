@@ -20,44 +20,47 @@ vim.keymap.set('n', '<C-k>', '<C-w>k')
 
 -- Vim Plug
 vim.cmd([[
-" Install vim-plug if not found
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
+	" Install vim-plug if not found
+	if empty(glob('~/.vim/autoload/plug.vim'))
+	  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+	    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	endif
 
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
+	" Run PlugInstall if there are missing plugins
+	autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+	  \| PlugInstall --sync | source $MYVIMRC
+	\| endif
 
-call plug#begin()
-	Plug 'neovim/nvim-lspconfig'
+	call plug#begin()
+		Plug 'neovim/nvim-lspconfig'
 
-	Plug 'nvim-tree/nvim-web-devicons'
-	Plug 'nvim-tree/nvim-tree.lua'
+		Plug 'nvim-tree/nvim-web-devicons'
+		Plug 'nvim-tree/nvim-tree.lua'
 
-	Plug 'vim-airline/vim-airline'
-	Plug 'vim-airline/vim-airline-themes'
+		Plug 'vim-airline/vim-airline'
+		Plug 'vim-airline/vim-airline-themes'
 
-	Plug 'folke/which-key.nvim'
+		Plug 'folke/which-key.nvim'
 
-	Plug 'bling/vim-bufferline'
+		Plug 'bling/vim-bufferline'
 
-	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-	Plug 'nvim-lua/plenary.nvim'
+		Plug 'nvim-lua/plenary.nvim'
 
-	Plug 'ThePrimeagen/refactoring.nvim'
+		Plug 'ThePrimeagen/refactoring.nvim'
 
-	Plug 'christoomey/vim-tmux-navigator'
+		Plug 'christoomey/vim-tmux-navigator'
 
-	Plug 'glepnir/zephyr-nvim'
+		Plug 'glepnir/zephyr-nvim'
 
-	Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
+		Plug 'tpope/vim-surround'
+		Plug 'tpope/vim-commentary'
 
-	Plug 'neoclide/coc.nvim', {'branch': 'release'}
-call plug#end()
+		Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
+
+		Plug 'neoclide/coc.nvim', {'branch': 'release'}
+	call plug#end()
 ]])
 
 -- If everything is installed, set up config.
@@ -65,7 +68,12 @@ call plug#end()
 if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	-- Set colour scheme
 	vim.cmd[[colorscheme zephyr]]
-	vim.g.airline_theme = 'jet'
+	vim.g.airline_theme = 'deus'
+	vim.cmd([[
+		let g:airline_powerline_fonts = 1
+		let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+		let g:airline#extensions#tabline#enabled = 1
+	]])
 
 	-- Colourful
 	vim.opt.termguicolors = true
@@ -145,6 +153,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 			name = "Code Action",
 			a = "LSP Action"
 		},
+		q = 'which_key_ignore',
 		s = {
 			name = "Split Buffers",
 			v = "Vertical",
@@ -163,6 +172,8 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 		gD = "Go to Declaration",
 		gi = "Go to Implemention",
 		gr = "Go to Reference",
+		cs = "Change Surround",
+		ds = "Delete Surround"
 	})
 
 	wk.register({
@@ -308,6 +319,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 
 	-- Remap keys for apply refactor code actions.
 	keyset("n", "<leader>re", "<Plug>(coc-codeaction-refactor)", { silent = true })
+	keyset("n", "<C-t>", "<Plug>(coc-codeaction-refactor)", { silent = true })
 	keyset("x", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
 	keyset("n", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
 

@@ -7,3 +7,5 @@ tmux/plugins/*
 
 # No zsh history please
 zsh/.zsh_history
+
+coc/list_history.dat
