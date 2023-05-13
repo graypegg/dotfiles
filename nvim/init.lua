@@ -3,11 +3,13 @@ vim.g.mapleader = ' '
 vim.keymap.set('n', '<Leader>e', '<cmd>NvimTreeToggle<CR>')
 vim.keymap.set('n', '<Leader>Pi', '<cmd>PlugInstall<CR>')
 vim.keymap.set('n', '<Leader>Pu', '<cmd>PlugUpdate<CR>')
+vim.keymap.set('n', '<Leader>PP', '<cmd>call plug#load("vimnuance")<CR>')
 vim.keymap.set('n', '<Leader>Ps', '<cmd>source $MYVIMRC<CR>')
 
 vim.keymap.set('n', '<Leader>bn', '<cmd>:bnext<CR>')
 vim.keymap.set('n', '<Leader>bv', '<cmd>:blast<CR>')
 vim.keymap.set('n', '<Leader>bc', '<cmd>:bdelete<CR>')
+vim.keymap.set('n', '<Leader>bC', '<cmd>:bdelete!<CR>')
 vim.keymap.set('n', '<Leader>bb', ':b ')
 
 vim.keymap.set('n', '<Leader>sv', ':vert sb ')
@@ -144,6 +146,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 			n = "Next",
 			v = "Prev",
 			c = "Close",
+			C = "Close!",
 			b = "Jump",
 			["<leader>"] = "Search"
 		},
