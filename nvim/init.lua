@@ -44,8 +44,6 @@ vim.cmd([[
 
 		Plug 'folke/which-key.nvim'
 
-		Plug 'bling/vim-bufferline'
-
 		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 		Plug 'nvim-lua/plenary.nvim'
