@@ -100,7 +100,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	-- Set up tree sitter
 	require('orgmode').setup_ts_grammar()
 	require'nvim-treesitter.configs'.setup {
-		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua', 'org' },
+		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua', 'vim', 'org' },
 		highlight = {
 			enable = true,
 			additional_vim_regex_highlighting = {'org'},
