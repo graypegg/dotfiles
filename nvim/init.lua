@@ -23,6 +23,16 @@ vim.keymap.set('n', '<C-k>', '<C-w>k')
 -- load filetype specific configs
 vim.cmd(":filetype on")
 
+vim.g.coc_global_extensions = {
+	  'coc-json',
+	  'coc-tsserver',
+	  'coc-html',
+	  'coc-css',
+	  'coc-yaml',
+	  'coc-highlight',
+	  'coc-omni'
+}
+
 -- Vim Plug
 vim.cmd([[
 	" Install vim-plug if not found
