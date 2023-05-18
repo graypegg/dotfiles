@@ -20,6 +20,9 @@ vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 
+-- load filetype specific configs
+vim.cmd(":filetype on")
+
 -- Vim Plug
 vim.cmd([[
 	" Install vim-plug if not found
@@ -60,6 +63,8 @@ vim.cmd([[
 		Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
 
 		Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+		Plug 'nvim-orgmode/orgmode'
 	call plug#end()
 ]])
 
@@ -93,9 +98,20 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	})
 
 	-- Set up tree sitter
+	require('orgmode').setup_ts_grammar()
 	require'nvim-treesitter.configs'.setup {
-		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua' },
+		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua', 'org' },
+		highlight = {
+			enable = true,
+			additional_vim_regex_highlighting = {'org'},
+		}
 	}
+
+	-- set up orgmode
+	require('orgmode').setup({
+		org_agenda_files = {'~/gray.org'},
+		org_default_notes_file = '~/gray.org',
+	})
 
 	-- Set up LSPs
 	require'lspconfig'.tsserver.setup {}
@@ -154,6 +170,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 			name = "Code Action",
 			a = "LSP Action"
 		},
+		o = { name = "org mode" },
 		q = 'which_key_ignore',
 		s = {
 			name = "Split Buffers",
@@ -165,7 +182,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 			f = "Find Files",
 			g = "Live Grep",
 			b = "Buffers",
-			h = "Help"
+			h = "Help",
 		}
 	}, { prefix = '<Leader>'})
 	wk.register({
@@ -373,17 +390,11 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	---@diagnostic disable-next-line: redefined-local
 	local opts = {silent = true, nowait = true}
 	-- Show commands
-	keyset("n", "<space>c", ":<C-u>CocList commands<cr>", opts)
+	keyset("n", "<space>aC", ":<C-u>CocList commands<cr>", opts)
 	-- Find symbol of current document
-	keyset("n", "<space>o", ":<C-u>CocList outline<cr>", opts)
+	keyset("n", "<space>a~", ":<C-u>CocList outline<cr>", opts)
 	-- Search workspace symbols
-	keyset("n", "<space>s", ":<C-u>CocList -I symbols<cr>", opts)
-	-- Do default action for next item
-	keyset("n", "<space>j", ":<C-u>CocNext<cr>", opts)
-	-- Do default action for previous item
-	keyset("n", "<space>k", ":<C-u>CocPrev<cr>", opts)
-	-- Resume latest coc list
-	keyset("n", "<space>p", ":<C-u>CocListResume<cr>", opts)
+	keyset("n", "<space>as", ":<C-u>CocList -I symbols<cr>", opts)
 
 	-- Other config to make things less horrible
 	vim.opt.rnu = true
