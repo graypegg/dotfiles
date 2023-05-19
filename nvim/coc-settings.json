@@ -1,0 +1,16 @@
+{
+	"languageserver": {
+		"crystal": {
+			"command": "crystalline",
+			"args": [
+				"--stdio"
+			],
+			"filetypes": [
+				"crystal"
+			],
+			"rootPatterns": [
+				"shard.yml"
+			]
+		}
+	}
+}
