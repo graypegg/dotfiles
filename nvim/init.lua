@@ -32,7 +32,8 @@ vim.g.coc_global_extensions = {
 	  'coc-css',
 	  'coc-yaml',
 	  'coc-highlight',
-	  'coc-omni'
+	  'coc-omni',
+	  'coc-solargraph'
 }
 
 -- Vim Plug
