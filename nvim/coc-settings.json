@@ -1,3 +1,17 @@
 {
-	"coc.source.omni.filetypes": ["org"]
+	"coc.source.omni.filetypes": ["org"],
+	"languageserver": {
+		"crystal": {
+			"command": "crystalline",
+			"args": [
+				"--stdio"
+			],
+			"filetypes": [
+				"crystal"
+			],
+			"rootPatterns": [
+				"shard.yml"
+			]
+		}
+	}
 }

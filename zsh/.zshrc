@@ -145,3 +145,8 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$PATH:$HOME/.rvm/bin"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+if [ -f ~/.ssh/id_graypegg_github ]; then
+	ssh-agent > /dev/null
+	ssh-add ~/.ssh/id_graypegg_github > /dev/null
+fi
