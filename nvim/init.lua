@@ -20,9 +20,6 @@ vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 
--- load filetype specific configs
-vim.cmd(":filetype on")
-
 -- Vim Plug
 vim.cmd([[
 	" Install vim-plug if not found
@@ -41,6 +38,11 @@ vim.cmd([[
 
 		Plug 'nvim-tree/nvim-web-devicons'
 		Plug 'nvim-tree/nvim-tree.lua'
+
+		Plug 'kosayoda/nvim-lightbulb'
+		Plug 'antoinemadec/FixCursorHold.nvim'
+		
+		Plug 'vim-crystal/vim-crystal'
 
 		Plug 'vim-airline/vim-airline'
 		Plug 'vim-airline/vim-airline-themes'
@@ -395,6 +397,9 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	keyset("n", "<space>a~", ":<C-u>CocList outline<cr>", opts)
 	-- Search workspace symbols
 	keyset("n", "<space>as", ":<C-u>CocList -I symbols<cr>", opts)
+
+	-- Show a lightbulb next to lines with an available code action
+	vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
 
 	-- Other config to make things less horrible
 	vim.opt.rnu = true
