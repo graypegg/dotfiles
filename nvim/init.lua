@@ -25,6 +25,16 @@ vim.keymap.set('t', '<esc>', '<C-\\><C-N>', {silent = true})
 -- load filetype specific configs
 vim.cmd(":filetype on")
 
+vim.g.coc_global_extensions = {
+	  'coc-json',
+	  'coc-tsserver',
+	  'coc-html',
+	  'coc-css',
+	  'coc-yaml',
+	  'coc-highlight',
+	  'coc-omni'
+}
+
 -- Vim Plug
 vim.cmd([[
 	" Install vim-plug if not found
@@ -107,7 +117,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 	-- Set up tree sitter
 	require('orgmode').setup_ts_grammar()
 	require'nvim-treesitter.configs'.setup {
-		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua', 'org' },
+		ensure_installed = { 'ruby', 'javascript', 'typescript', 'lua', 'vim', 'org' },
 		highlight = {
 			enable = true,
 			additional_vim_regex_highlighting = {'org'},

@@ -1,4 +1,5 @@
 {
+	"coc.source.omni.filetypes": ["org"],
 	"languageserver": {
 		"crystal": {
 			"command": "crystalline",
