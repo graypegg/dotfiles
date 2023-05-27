@@ -121,7 +121,6 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
 export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/openssl@3/lib"
 export CPPFLAGS="-I/usr/local/opt/openssl@3/include"
@@ -138,15 +137,24 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-
 . "$HOME/.cargo/env"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 if [ -f ~/.ssh/id_graypegg_github ]; then
 	ssh-agent > /dev/null
 	ssh-add ~/.ssh/id_graypegg_github > /dev/null
 fi
+
+if [ -f /opt/homebrew/opt/libpq/bin/psql ]; then
+	export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+	export LDFLAGS="-L/opt/homebrew/opt/libpq/lib"
+	export CPPFLAGS="-I/opt/homebrew/opt/libpq/include"
+fi
+
+if [ -f /opt/homebrew/opt/openjdk/bin/java ]; then
+	export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
