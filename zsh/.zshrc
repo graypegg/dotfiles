@@ -142,8 +142,8 @@ export NVM_DIR="$HOME/.nvm"
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 
 if [ -f ~/.ssh/id_graypegg_github ]; then
-	ssh-agent > /dev/null
-	ssh-add ~/.ssh/id_graypegg_github > /dev/null
+	eval `ssh-agent -s` > /dev/null 2>&1
+	ssh-add ~/.ssh/id_graypegg_github > /dev/null 2>&1
 fi
 
 if [ -f /opt/homebrew/opt/libpq/bin/psql ]; then
