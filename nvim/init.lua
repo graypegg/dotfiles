@@ -111,10 +111,7 @@ if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
 		},
 		renderer = {
 			group_empty = true,
-		},
-		filters = {
-			dotfiles = true,
-		},
+		}
 	})
 
 	-- Set up tree sitter
