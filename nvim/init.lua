@@ -107,14 +107,16 @@ if vim.fn.has_key(vim.g['plugs'], 'coc.nvim') == 1 then
 	local is_picking_close = require("cokeline/mappings").is_picking_close
 	local get_hex = require("cokeline/utils").get_hex
 
+	-- Use this command to get colour list for get_hex function ==> :so $VIMRUNTIME/syntax/hitest.vim
+
 	local red = vim.g.terminal_color_1
 	local yellow = vim.g.terminal_color_4
 	local space = {text = " "}
-	local dark = get_hex("Normal", "bg")
+	local dark = get_hex("StatusLine", "bg")
 	local text = get_hex("Comment", "fg")
 	local grey = get_hex("ColorColumn", "bg")
 	local light = get_hex("Normal", "fg")
-	local high = "#a6d120"
+	local high = get_hex("airline_x", "fg")
 
 	vim.g.airline_theme = 'deus'
 	vim.cmd([[
