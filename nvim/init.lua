@@ -22,7 +22,6 @@ vim.keymap.set('n', '<C-h>', '<C-w>h')
 vim.keymap.set('n', '<C-j>', '<C-w>j')
 vim.keymap.set('n', '<C-k>', '<C-w>k')
 vim.keymap.set('n', '<C-c>', '<cmd>:bp|bd #<CR>') -- Move to last buffer and close previous buffer (represented by #) cleanly. Keeps window/split open.
-vim.keymap.set('n', '<C-C>', '<cmd>:edit #<CR>') -- Undo above command kind of. Reopens last closed buffer.
 vim.keymap.set('n', '<Leader>bc', '<cmd>:bp|bd #<CR>')
 vim.keymap.set('n', '<Leader>bC', '<cmd>:bdelete!<CR>')
 
