@@ -9,6 +9,10 @@ vim.keymap.set('n', '<Leader>Ps', '<cmd>source $MYVIMRC<CR>')
 vim.keymap.set('n', '<Leader>bn', '<cmd>:bnext<CR>')
 vim.keymap.set('n', '<Leader>bv', '<cmd>:blast<CR>')
 vim.keymap.set('n', '<Leader>bb', ':b ')
+vim.keymap.set("n", "<leader>bp", '<Plug>(cokeline-pick-focus)')
+vim.keymap.set("n", "<leader>bw", '<Plug>(cokeline-pick-close)')
+vim.keymap.set('n', '<S-Tab>',   '<Plug>(cokeline-focus-prev)',  { silent = true })
+vim.keymap.set('n', '<Tab>',     '<Plug>(cokeline-focus-next)',  { silent = true })
 
 vim.keymap.set('n', '<Leader>sv', ':vert sb ')
 vim.keymap.set('n', '<Leader>sh', ':sb ')
@@ -65,6 +69,8 @@ vim.cmd([[
 		Plug 'vim-airline/vim-airline'
 		Plug 'vim-airline/vim-airline-themes'
 
+		Plug 'willothy/nvim-cokeline'
+
 		Plug 'folke/which-key.nvim'
 
 		Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -88,17 +94,113 @@ vim.cmd([[
 	call plug#end()
 ]])
 
+
 -- If everything is installed, set up config.
 -- Gives you a chance to do a :PlugInstall x2 to get everything working. (Two times because of dependancies)
-if vim.fn.has_key(vim.g['plugs'], 'vim-airline') == 1 then
+if vim.fn.has_key(vim.g['plugs'], 'coc.nvim') == 1 then
+	vim.opt.termguicolors = true
+	
 	-- Set colour scheme
 	vim.cmd[[colorscheme zephyr]]
+
+	-- Variables
+	local is_picking_focus = require("cokeline/mappings").is_picking_focus
+	local is_picking_close = require("cokeline/mappings").is_picking_close
+	local get_hex = require("cokeline/utils").get_hex
+
+	local red = vim.g.terminal_color_1
+	local yellow = vim.g.terminal_color_4
+	local space = {text = " "}
+	local dark = get_hex("Normal", "bg")
+	local text = get_hex("Comment", "fg")
+	local grey = get_hex("ColorColumn", "bg")
+	local light = get_hex("Normal", "fg")
+	local high = "#a6d120"
+
 	vim.g.airline_theme = 'deus'
 	vim.cmd([[
 		let g:airline_powerline_fonts = 1
-		let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
-		let g:airline#extensions#tabline#enabled = 1
 	]])
+
+	-- Bufferline
+	require("cokeline").setup({
+		default_hl = {
+		    fg = function(buffer)
+			if buffer.is_focused then
+			    return dark
+			end
+			return light
+		    end,
+		    bg = function(buffer)
+			if buffer.is_focused then
+			    return high
+			end
+			return grey
+		    end
+		},
+		components = {
+		    {
+			text = function(buffer)
+			    if buffer.index ~= 1 then
+				return ""
+			    end
+			    return ""
+			end,
+			bg = function(buffer)
+			    if buffer.is_focused then
+				return high
+			    end
+			    return grey
+			end,
+			fg = dark
+		    },
+		    space,
+		    {
+			text = function(buffer)
+			    if is_picking_focus() or is_picking_close() then
+				return buffer.pick_letter .. " "
+			    end
+
+			    return buffer.devicon.icon
+			end,
+			fg = function(buffer)
+			    if is_picking_focus() then
+				return yellow
+			    end
+			    if is_picking_close() then
+				return red
+			    end
+
+			    if buffer.is_focused then
+				return dark
+			    else
+				return light
+			    end
+			end,
+			style = function(_)
+			    return (is_picking_focus() or is_picking_close()) and "italic,bold" or nil
+			end
+		    },
+		    {
+			text = function(buffer)
+			    return buffer.unique_prefix .. buffer.filename .. "⠀"
+			end,
+			style = function(buffer)
+			    return buffer.is_focused and "bold" or nil
+			end
+		    },
+		    {
+			text = "",
+			fg = function(buffer)
+			    if buffer.is_focused then
+				return high
+			    end
+			    return grey
+			end,
+			bg = dark
+		    }
+		}
+	})
 
 	-- Colourful
 	vim.opt.termguicolors = true
